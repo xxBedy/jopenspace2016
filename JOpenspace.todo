@@ -4,7 +4,7 @@ SpringBoot Microservice on Heroku
   sdk install springboot
 
  ☐ Create springboot project
-  spring init --build gradle -l groovy -g com.vendavo.poc -a boot
+  spring init --build gradle -l groovy -g com.vendavo.poc -a boot -package-name com.vendavo.poc.boot
  
  ☐ Build application
   gradle build
@@ -25,12 +25,14 @@ SpringBoot Microservice on Heroku
       }
   }
 
+ ☐ Test controller
+  curl -v -XGET http://localhost:8080/currentTime
 
  ☐ Add JPA dependency
   compile('org.springframework.boot:spring-boot-starter-data-jpa')
   compile("com.h2database:h2")
 
- ☐ Create domain object
+ ☐ Create domain class
   @Entity(name = "invoice")
   class Invoice {
       @Id
@@ -47,11 +49,11 @@ SpringBoot Microservice on Heroku
   }
 
  ☐ Insert Invoice
-  {
+  curl -XPOST http://localhost:8080/invoices -d'{
     "company":"JOpenspace",
     "ico":"42",
     "address":"Pelhrimov"
-  }
+  }'
 
  ☐ HAL browser
   compile('org.springframework.data:spring-data-rest-hal-browser')
