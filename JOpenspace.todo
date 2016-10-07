@@ -1,0 +1,76 @@
+SpringBoot Microservice on Heroku
+
+ ☐ Install spring CLI (http://sdkman.io)
+  sdk install springboot
+
+ ☐ Create springboot project
+  spring init --build gradle -l groovy -g com.vendavo.poc -a boot
+ 
+ ☐ Build application
+  gradle build
+ 
+ ☐ Run application
+  gradle bootRun
+ 
+ ☐ Add REST dependency (HATEOAS - Hypertext driven REST)
+  compile('org.springframework.boot:spring-boot-starter-data-rest')
+
+ ☐ Create controller
+  @Controller()
+  class Time {
+      @RequestMapping("/currentTime")
+      @ResponseBody
+      String currentTime() {
+          return new Date().toString();
+      }
+  }
+
+
+ ☐ Add JPA dependency
+  compile('org.springframework.boot:spring-boot-starter-data-jpa')
+  compile("com.h2database:h2")
+
+ ☐ Create domain object
+  @Entity(name = "invoice")
+  class Invoice {
+      @Id
+      @GeneratedValue(strategy = GenerationType.AUTO)
+      Long id;
+      String company
+      String ico
+      String address
+  }
+
+ ☐ Create repository
+  @RepositoryRestResource(collectionResourceRel = "invoices", path = "invoices")
+  public interface InvoiceRepository extends PagingAndSortingRepository<Invoice, Long>, QueryByExampleExecutor<Invoice> {
+  }
+
+ ☐ Insert Invoice
+  {
+    "company":"JOpenspace",
+    "ico":"42",
+    "address":"Pelhrimov"
+  }
+
+ ☐ HAL browser
+  compile('org.springframework.data:spring-data-rest-hal-browser')
+
+ ☐  Security
+  compile('org.springframework.boot:spring-boot-starter-security')
+
+ ☐ Test  
+
+ ☐ Heroku Procfile
+  web: java -Dserver.port=$PORT -jar  build/libs/boot-0.0.1-SNAPSHOT.jar
+
+ ☐ Heroku support in gradle
+  compileJava.dependsOn clean
+  task stage {
+    dependsOn clean, build
+  }
+
+ ☐ Create heroku app
+ heroku create
+ git push heroku master
+
